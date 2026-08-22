@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import type {
   SchoolProfile,
   InfrastructureAssessment,
@@ -114,154 +115,157 @@ export default function AssessmentPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">School Readiness Assessment</h1>
-        <p className="text-gray-600 mb-8">
-          Help us understand your school's technology readiness to provide personalized EdTech recommendations.
-        </p>
+    <ProtectedRoute role="teacher">
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">School Readiness Assessment</h1>
+          <p className="text-gray-600 mb-8">
+            Help us understand your school's technology readiness to provide personalized EdTech recommendations.
+          </p>
 
-        {successMessage && (
-          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
-            {successMessage}
-          </div>
-        )}
-
-        {errorMessage && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
-            {errorMessage}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">School Profile</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">School Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={schoolProfile.name || ''}
-                  onChange={(e) => setSchoolProfile({...schoolProfile, name: e.target.value})}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={schoolProfile.location || ''}
-                  onChange={(e) => setSchoolProfile({...schoolProfile, location: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+          {successMessage && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
+              {successMessage}
             </div>
-          </section>
+          )}
 
-          <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Infrastructure Assessment</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Number of Devices</label>
-                <input
-                  type="number"
-                  name="deviceCount"
-                  value={infrastructure.deviceCount || ''}
-                  onChange={(e) => setInfrastructure({...infrastructure, deviceCount: Number(e.target.value) || 0})}
-                  min="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Device Availability</label>
-                <select
-                  name="deviceAvailability"
-                  value={infrastructure.deviceAvailability || ''}
-                  onChange={(e) => setInfrastructure({...infrastructure, deviceAvailability: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select availability</option>
-                  <option value="excellent">Excellent</option>
-                  <option value="good">Good</option>
-                  <option value="fair">Fair</option>
-                  <option value="poor">Poor</option>
-                </select>
-              </div>
+          {errorMessage && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+              {errorMessage}
             </div>
-          </section>
+          )}
 
-          <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Teacher Readiness Assessment</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Digital Skills</label>
-                <select
-                  name="digitalSkills"
-                  value={teacherReadiness.digitalSkills || ''}
-                  onChange={(e) => setTeacherReadiness({...teacherReadiness, digitalSkills: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select skill level</option>
-                  <option value="excellent">Excellent</option>
-                  <option value="good">Good</option>
-                  <option value="fair">Fair</option>
-                  <option value="poor">Poor</option>
-                </select>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <section>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">School Profile</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">School Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={schoolProfile.name || ''}
+                    onChange={(e) => setSchoolProfile({...schoolProfile, name: e.target.value})}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={schoolProfile.location || ''}
+                    onChange={(e) => setSchoolProfile({...schoolProfile, location: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">School Management Assessment</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Technology Strategy</label>
-                <select
-                  name="technologyStrategy"
-                  value={schoolManagement.technologyStrategy || ''}
-                  onChange={(e) => setSchoolManagement({...schoolManagement, technologyStrategy: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select strategy level</option>
-                  <option value="excellent">Excellent</option>
-                  <option value="good">Good</option>
-                  <option value="fair">Fair</option>
-                  <option value="poor">Poor</option>
-                </select>
+            <section>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Infrastructure Assessment</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Number of Devices</label>
+                  <input
+                    type="number"
+                    name="deviceCount"
+                    value={infrastructure.deviceCount || ''}
+                    onChange={(e) => setInfrastructure({...infrastructure, deviceCount: Number(e.target.value) || 0})}
+                    min="0"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Device Availability</label>
+                  <select
+                    name="deviceAvailability"
+                    value={infrastructure.deviceAvailability || ''}
+                    onChange={(e) => setInfrastructure({...infrastructure, deviceAvailability: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select availability</option>
+                    <option value="excellent">Excellent</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                  </select>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Learning Requirements Assessment</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                <input
-                  type="text"
-                  name="subject"
-                  value={learningRequirements.subject || ''}
-                  onChange={(e) => setLearningRequirements({...learningRequirements, subject: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            <section>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Teacher Readiness Assessment</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Digital Skills</label>
+                  <select
+                    name="digitalSkills"
+                    value={teacherReadiness.digitalSkills || ''}
+                    onChange={(e) => setTeacherReadiness({...teacherReadiness, digitalSkills: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select skill level</option>
+                    <option value="excellent">Excellent</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                  </select>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <div className="pt-6">
-            <button
-              type="submit"
-              disabled={pending || isLoading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {pending ? 'Submitting...' : 'Submit Assessment'}
-            </button>
-          </div>
-        </form>
+            <section>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">School Management Assessment</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Technology Strategy</label>
+                  <select
+                    name="technologyStrategy"
+                    value={schoolManagement.technologyStrategy || ''}
+                    onChange={(e) => setSchoolManagement({...schoolManagement, technologyStrategy: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select strategy level</option>
+                    <option value="excellent">Excellent</option>
+                    <option value="good">Good</option>
+                    <option value="fair">Fair</option>
+                    <option value="poor">Poor</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Learning Requirements Assessment</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                  <input
+                    type="text"
+                    name="subject"
+                    value={learningRequirements.subject || ''}
+                    onChange={(e) => setLearningRequirements({...learningRequirements, subject: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </section>
+
+            <div className="pt-6">
+              <button
+                type="submit"
+                disabled={pending || isLoading}
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              >
+                {pending ? 'Submitting...' : 'Submit Assessment'}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
