@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { Profile } from '../types'
 
 export default function Dashboard() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
-  const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [username, setUsername] = useState('')
@@ -33,7 +31,6 @@ export default function Dashboard() {
 
       if (error) throw error
       if (data) {
-        setProfile(data)
         setUsername(data.username || '')
         setAvatarUrl(data.avatar_url || '')
         setWebsite(data.website || '')
