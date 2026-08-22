@@ -1,12 +1,12 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
-import { useAuth, useNavigate } from './contexts/AuthContext'
+import { useAuth } from './contexts/AuthContext'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import AdminDashboard from './pages/AdminDashboard' // New component
-import { ProtectedRoute, UserProtectedRoute, AdminProtectedRoute } from './components/RouteProtection'
+import { UserProtectedRoute, AdminProtectedRoute } from './components/RouteProtection'
 import AccessDenied from './pages/AccessDenied' // New component
 
 function AuthCallback() {

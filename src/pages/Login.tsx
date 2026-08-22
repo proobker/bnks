@@ -9,7 +9,7 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
-  const { signIn, signInWithGoogle } = useAuth()
+  const { signIn, signInWithGoogle, user } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,7 +19,6 @@ export default function Login() {
     try {
       await signIn(email, password)
       // After successful login, check role and redirect appropriately
-      const { user } = useAuth()
       if (user?.role === 'admin') {
         navigate('/admin/dashboard', { replace: true })
       } else {

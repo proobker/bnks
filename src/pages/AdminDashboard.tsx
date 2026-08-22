@@ -3,12 +3,22 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
+// Define the user profile type
+type Profile = {
+  id: string
+  username: string | null
+  avatar_url: string | null
+  website: string | null
+  role: string
+  updated_at: string
+}
+
 export default function AdminDashboard() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState<Profile[]>([])
 
   useEffect(() => {
     if (user && user.role === 'admin') {
@@ -70,17 +80,17 @@ export default function AdminDashboard() {
               <p className="text-gray-600">No users found.</p>
             ) : (
               <div className="space-y-4">
-                {users.map(user => (
-                  <div key={user.id} className="border p-4 rounded-lg bg-gray-50">
+                {users.map((profile) => (
+                  <div key={profile.id} className="border p-4 rounded-lg bg-gray-50">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium text-gray-800">{user.username || 'Unnamed'}</h3>
-                        <p className="text-sm text-gray-500">{user.id}</p>
+                        <h3 className="font-medium text-gray-800">{profile.username || 'Unnamed'}</h3>
+                        <p className="text-sm text-gray-500">{profile.id}</p>
                       </div>
                       <div className="space-x-3">
                         <select
-                          value={user.role}
-                          onChange={(e) => updateUserRole(user.id, e.target.value as 'admin' | 'user')}
+                          value={profile.role}
+                          onChange={(e) => updateUserRole(profile.id, e.target.value as 'admin' | 'user')}
                           className="border rounded px-3 py-1"
                         >
                           <option value="user">User</option>
