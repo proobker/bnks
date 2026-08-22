@@ -21,11 +21,11 @@ export default function StudentSurveyPage() {
     if (name === 'studentId') setStudentId(value);
   };
 
-  const handleSurveyChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = e.target;
+  const handleSurveyChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setSurveyData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     }));
   };
 
@@ -35,8 +35,6 @@ export default function StudentSurveyPage() {
       return;
     }
 
-    // In a real implementation, we would validate against a database
-    // For MVP, we'll accept any non-empty values
     setIsAuthenticated(true);
     setErrorMessage(null);
   };
@@ -53,8 +51,6 @@ export default function StudentSurveyPage() {
     setSuccessMessage(null);
 
     try {
-      // In a real implementation, we would get the school ID from the school code
-      // For MVP, we'll generate a school ID from the code
       const schoolId = 'school-' + schoolCode.toLowerCase().replace(/\s+/g, '-');
 
       const surveyDataToSave: StudentSurvey = {
@@ -76,7 +72,6 @@ export default function StudentSurveyPage() {
       if (error) throw error;
 
       setSuccessMessage('Survey submitted successfully! Thank you for helping improve EdTech recommendations for your school.');
-      // Reset form after successful submission
       setSurveyData({});
     } catch (error: any) {
       console.error('Error submitting survey:', error);
@@ -154,7 +149,6 @@ export default function StudentSurveyPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Device Ownership */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Device Ownership</label>
               <div className="mt-2 space-y-2">
@@ -181,7 +175,7 @@ export default function StudentSurveyPage() {
                       onChange={handleSurveyChange}
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
                     />
-                    "<span className="ml-2">Smartphone</span>"
+                    <span className="ml-2">Smartphone</span>
                   </label>
                 </div>
                 <div>
@@ -213,7 +207,6 @@ export default function StudentSurveyPage() {
               </div>
             </div>
 
-            {/* Internet Availability */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Internet Availability at Home</label>
               <div className="mt-2 space-y-2">
@@ -259,112 +252,18 @@ export default function StudentSurveyPage() {
               </div>
             </div>
 
-            {/* Learning Preferences */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Learning Methods (check all that apply)</label>
-              <div className="mt-2 space-y-2">
-                <div>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="learningPreferences"
-                      value="videos"
-                      onChange={handleSurveyChange}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <span className="ml-2">Educational Videos</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="learningPreferences"
-                      value="games"
-                      onChange={handleSurveyChange}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <span className="ml-2">Learning Games</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="learningPreferences"
-                      value="reading"
-                      onChange={handleSurveyChange}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <span className="ml-2">Reading & Text</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="learningPreferences"
-                      value="projects"
-                      onChange={handleSurveyChange}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <span className="ml-2">Hands-on Projects</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      name="learningPreferences"
-                      value="quizzes"
-                      onChange={handleSurveyChange}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <span className="ml-2">Quizzes & Assessments</span>
-                  </label>
-                </div>
-              </div>
+            <div className="pt-6">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              >
+                {isLoading ? 'Submitting...' : 'Submit Survey'}
+              </button>
             </div>
-
-            {/* Digital Confidence */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confidence Using Technology for Learning</label>
-              <div className="mt-2 space-y-2">
-                <div>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="digitalConfidence"
-                      value="excellent"
-                      checked={surveyData.digitalConfidence === 'excellent'}
-                      onChange={handleSurveyChange}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <span className="ml-2">Excellent</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="digitalConfidence"
-                      value="good"
-                      checked={surveyData.digitalConfidence === 'good'}
-                      onChange={handleSurveyChange}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <span className="ml-2">Good</span>
-                  </label>
-                </div>
-                <div>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="digitalConfidence"
-                      value="fair"
-                      checked={surveyData.digitalConfidence === 'fair'}
-                      onChange={handleSurveyChange}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <span className="ml-2">Fair</span>
-                  </label
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}

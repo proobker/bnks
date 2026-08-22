@@ -36,12 +36,9 @@ export default function RecommendationsPage() {
 
   const supabase = createBrowserSupabaseClient();
 
-  // For demo purposes, we'll use a fixed school ID or allow manual entry
-  // In a real app, this would come from authentication context
   const demoSchoolId = 'demo-school-12345';
 
   useEffect(() => {
-    // Set school ID for demo
     setSchoolId(demoSchoolId);
     fetchSchoolData();
   }, []);
@@ -53,16 +50,14 @@ export default function RecommendationsPage() {
       setIsLoading(true);
       setError(null);
 
-      // Fetch school profile
       const { data: profileData, error: profileError } = await supabase
         .from('school_profiles')
         .select('*')
         .eq('id', schoolId)
         .single();
 
-      if (profileError && profileError.code !== 'PGRST116') throw profileError; // PGRST116 means no rows returned
+      if (profileError && profileError.code !== 'PGRST116') throw profileError;
 
-      // Fetch infrastructure assessment
       const { data: infraData, error: infraError } = await supabase
         .from('infrastructure_assessments')
         .select('*')
@@ -71,7 +66,6 @@ export default function RecommendationsPage() {
 
       if (infraError && infraError.code !== 'PGRST116') throw infraError;
 
-      // Fetch teacher readiness assessment
       const { data: teacherData, error: teacherError } = await supabase
         .from('teacher_readiness_assessments')
         .select('*')
@@ -80,7 +74,6 @@ export default function RecommendationsPage() {
 
       if (teacherError && teacherError.code !== 'PGRST116') throw teacherError;
 
-      // Fetch school management assessment
       const { data: managementData, error: managementError } = await supabase
         .from('school_management_assessments')
         .select('*')
@@ -89,7 +82,6 @@ export default function RecommendationsPage() {
 
       if (managementError && managementError.code !== 'PGRST116') throw managementError;
 
-      // Fetch learning requirements assessment
       const { data: learningData, error: learningError } = await supabase
         .from('learning_requirements_assessments')
         .select('*')
@@ -98,7 +90,6 @@ export default function RecommendationsPage() {
 
       if (learningError && learningError.code !== 'PGRST116') throw learningError;
 
-      // Fetch student surveys
       const { data: surveysData, error: surveysError } = await supabase
         .from('student_surveys')
         .select('*')
@@ -123,7 +114,6 @@ export default function RecommendationsPage() {
     }
   };
 
-  // Calculate compatibility results when school data changes
   useEffect(() => {
     const { profile, infrastructure, teacherReadiness, schoolManagement, learningRequirements, studentSurveys } = schoolData;
 
@@ -180,7 +170,6 @@ export default function RecommendationsPage() {
             <p className="text-gray-600 mb-6">
               Please complete the school assessment first to see personalized EdTech recommendations.
             </p>
-            {/* In a real app, this would link to the assessment page */}
             <button className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
               Go to Assessment
             </button>
@@ -226,7 +215,6 @@ export default function RecommendationsPage() {
                             </div>
                           </div>
 
-                          {/* Progress bar */}
                           <div className="w-full bg-gray-200 rounded-full h-2.5 mb-3">
                             <div
                               className={`h-2.5 rounded-full ${result.compatibilityScore >= 80 ? 'bg-green-500' : result.compatibilityScore >= 60 ? 'bg-yellow-500' : result.compatibilityScore >= 40 ? 'bg-orange-500' : 'bg-red-500'} transition-all duration-500`}
@@ -234,7 +222,6 @@ export default function RecommendationsPage() {
                             ></div>
                           </div>
 
-                          {/* Problems and recommendation */}
                           {result.problems.length > 0 && (
                             <div className="mb-3 p-3 bg-yellow-50 rounded-lg">
                               <h4 className="font-medium text-yellow-800 mb-1">⚠️ Identified Challenges:</h4>
@@ -256,7 +243,6 @@ export default function RecommendationsPage() {
                   </div>
                 </div>
 
-                {/* Summary section */}
                 <div className="mt-8 pt-6 border-t border-gray-200">
                   <h2 className="text-xl font-semibold text-gray-800 mb-4">Summary & Next Steps</h2>
                   <div className="space-y-4">
@@ -287,6 +273,6 @@ export default function RecommendationsPage() {
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
