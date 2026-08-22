@@ -219,7 +219,7 @@ const scoreRangeTemplates = {
     `${schoolName} has limited readiness for ${toolName} at this time. Significant preparation would be needed before considering implementation.`,
 
   poor: (schoolName: string, toolName: string) =>
-    `${schoolName} currently lacks the necessary infrastructure and readiness for ${tool_name} implementation. Consider addressing fundamental gaps first.`
+    `${schoolName} currently lacks the necessary infrastructure and readiness for ${toolName} implementation. Consider addressing fundamental gaps first.`
 };
 
 export default { generateExplanation, generateImplementationPlan, generateExplanationResult };

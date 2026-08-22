@@ -157,7 +157,7 @@ export const calculateSchoolReadinessScore = (
   learningRequirements: LearningRequirementsAssessment,
   studentSurveys: StudentSurvey[]
 ): number => {
-  const infraScore = calculateInfrastructureScore(infrastructure, student.studentCount);
+  const infraScore = calculateInfrastructureScore(infrastructure, school.studentCount);
   const teacherScore = calculateTeacherReadinessScore(teacherReadiness);
   const managementScore = calculateSchoolManagementScore(schoolManagement);
   const learningScore = calculateLearningRequirementsScore(learningRequirements);

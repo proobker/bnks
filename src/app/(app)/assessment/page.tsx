@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useFormStatus } from 'react';
+import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
 import type {
   SchoolProfile,
@@ -34,10 +35,13 @@ export default function AssessmentPage() {
 
       const schoolData: SchoolProfile = {
         id: schoolId,
-        ...schoolProfile,
+        name: schoolProfile.name || '',
+        location: schoolProfile.location || '',
+        schoolType: schoolProfile.schoolType || 'public',
         studentCount: schoolProfile.studentCount || 0,
+        gradeLevels: Array.isArray(schoolProfile.gradeLevels) ? schoolProfile.gradeLevels : [],
         teacherCount: schoolProfile.teacherCount || 0,
-        gradeLevels: schoolProfile.gradeLevels ? Array.isArray(schoolProfile.gradeLevels) ? schoolProfile.gradeLevels : [schoolProfile.gradeLevels] : [],
+        currentTechnologyUsage: schoolProfile.currentTechnologyUsage || '',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -176,7 +180,7 @@ export default function AssessmentPage() {
                 <select
                   name="deviceAvailability"
                   value={infrastructure.deviceAvailability || ''}
-                  onChange={(e) => setInfrastructure({...infrastructure, deviceAvailability: e.target.value})}
+                  onChange={(e) => setInfrastructure({...infrastructure, deviceAvailability: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select availability</option>
@@ -197,7 +201,7 @@ export default function AssessmentPage() {
                 <select
                   name="digitalSkills"
                   value={teacherReadiness.digitalSkills || ''}
-                  onChange={(e) => setTeacherReadiness({...teacherReadiness, digitalSkills: e.target.value})}
+                  onChange={(e) => setTeacherReadiness({...teacherReadiness, digitalSkills: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select skill level</option>
@@ -218,7 +222,7 @@ export default function AssessmentPage() {
                 <select
                   name="technologyStrategy"
                   value={schoolManagement.technologyStrategy || ''}
-                  onChange={(e) => setSchoolManagement({...schoolManagement, technologyStrategy: e.target.value})}
+                  onChange={(e) => setSchoolManagement({...schoolManagement, technologyStrategy: e.target.value as 'excellent' | 'good' | 'fair' | 'poor'})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select strategy level</option>
