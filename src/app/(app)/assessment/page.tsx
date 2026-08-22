@@ -265,7 +265,6 @@ export default function AssessmentPage() {
           </form>
         </div>
       </div>
-    </div>
     </ProtectedRoute>
   );
 }
