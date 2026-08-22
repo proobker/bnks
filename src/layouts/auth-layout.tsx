@@ -11,7 +11,7 @@ export const authMetadata: Metadata = {
     siteName: 'EduFit Nepal',
   },
   twitter: {
-    handle: '@edufitnepal',
+    site: '@edufitnepal',
     card: 'summary_large_image',
   },
 };
