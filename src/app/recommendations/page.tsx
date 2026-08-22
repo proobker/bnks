@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
 import { getAllToolCompatibility, edTechTools } from '@/lib/scoring';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import EventFinder from '@/components/events/EventFinder';
 import type {
   SchoolProfile,
   InfrastructureAssessment,
@@ -131,65 +132,44 @@ export default function RecommendationsPage() {
     }
   }, [schoolData]);
 
-  if (isLoading && !schoolData.profile) {
-    return (
-      <ProtectedRoute>
-        <div className="min-h-screen bg-gray-50 py-8">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[calc(100vh-160px)]">
-            <div className="text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-              <p className="mt-4 text-gray-600">Loading your school's assessment data...</p>
+  const { profile } = schoolData;
+
+  return (
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {isLoading && !profile ? (
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="flex items-center justify-center min-h-[calc(100vh-160px)] py-20">
+              <div className="text-center">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                <p className="mt-4 text-gray-600">Loading your school assessment data...</p>
+              </div>
             </div>
           </div>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
-  if (error) {
-    return (
-      <ProtectedRoute>
-        <div className="min-h-screen bg-gray-50 py-8">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        ) : error ? (
+          <div className="py-20">
             <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
               <h2 className="text-xl font-semibold text-red-800 mb-4">Error Loading Data</h2>
               <p className="text-red-700">{error}</p>
               <p className="mt-4 text-gray-600">
-                Make sure you have completed the school assessment and student surveys first.
+                Make sure you have completed the school assessment and student surveys first. The events finder below still works.
               </p>
             </div>
           </div>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
-  const { profile } = schoolData;
-
-  if (!profile) {
-    return (
-      <ProtectedRoute>
-        <div className="min-h-screen bg-gray-50 py-8">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        ) : !profile ? (
+          <div className="py-20">
             <div className="text-center">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">No Assessment Data Found</h2>
               <p className="text-gray-600 mb-6">
-                Please complete the school assessment first to see personalized EdTech recommendations.
+                Complete the school assessment to see personalized EdTech recommendations. The events finder below works regardless.
               </p>
               <button className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
                 Go to Assessment
               </button>
             </div>
           </div>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
-  return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        ) : (
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="px-6 py-4 border-b bg-indigo-50">
               <h1 className="text-2xl font-bold text-indigo-800 flex items-center">
@@ -280,6 +260,9 @@ export default function RecommendationsPage() {
               )}
             </div>
           </div>
+        )}
+
+          <EventFinder />
         </div>
       </div>
     </ProtectedRoute>
