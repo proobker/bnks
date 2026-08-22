@@ -12,6 +12,7 @@ This is a hackathon starter kit with:
 - TypeScript for type safety
 - Tailwind CSS for utility-first styling
 - Supabase for authentication, Postgres database, and row-level security
+- Role-based access control (admin/user roles)
 - Pre-configured for Vercel static SPA deployment
 - Capacitor configuration for mobile app wrapping
 
@@ -31,9 +32,17 @@ Key directories and files to know:
 ```
 src/
 ├── components/          # Reusable UI components
+│   ├── ProtectedRoute.tsx      # Base route protection
+│   └── RouteProtection.tsx     # Role-based route protection
 ├── contexts/            # React contexts (AuthContext)
 ├── lib/                 # Supabase client initialization
-├── pages/               # Page components (Landing, Login, Signup, Dashboard)
+├── pages/               # Page components
+│   ├── Landing.tsx          # Home page
+│   ├── Login.tsx            # Email/password login
+│   ├── Signup.tsx           # User registration
+│   ├── Dashboard.tsx        # Protected user dashboard
+│   ├── AdminDashboard.tsx   # Admin user dashboard
+│   └── AccessDenied.tsx     # Access denied page
 ├── types/               # TypeScript type definitions
 ├── App.tsx              # Main app component
 ├── main.tsx             # Entry point
@@ -42,17 +51,20 @@ src/
 
 # Key files:
 # - src/lib/supabase.ts - Supabase client setup
-# - src/contexts/AuthContext.tsx - Authentication context
-# - src/components/ProtectedRoute.tsx - Route protection component
-# - src/pages/Login.tsx - Email/password login page
+# - src/contexts/AuthContext.tsx - Authentication context (updated for role handling)
+# - src/components/RouteProtection.tsx - Role-based route protection components
+# - src/pages/Login.tsx - Email/password login page (with role-based redirect)
 # - src/pages/Signup.tsx - User registration page
 # - src/pages/Dashboard.tsx - Protected user dashboard
+# - src/pages/AdminDashboard.tsx - Admin dashboard for user management
+# - src/pages/AccessDenied.tsx - Access denied page
 # - .env.example - Environment variables template
 ```
 
 ## Supabase Integration
 This boilerplate expects a Supabase project with:
 1. **Table**: `public.profiles` (see README.md for full schema)
+   - Includes `role` column for admin/user distinction (default: 'user')
 2. **Authentication**: Email/password and OAuth providers configured
 3. **Row Level Security**: Policies enabled on profiles table
 
@@ -86,6 +98,34 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 - **Vercel**: Output of `vite build` is a static SPA - deploy with zero configuration
 - **Development**: `rtk dev` for local development with hot reload
 - **Preview**: `rtk preview` to test production build locally
+
+## Role-Based Access Control
+
+This boilerplate implements role-based access control with two roles: `admin` and `user`.
+
+### Database Schema
+The `public.profiles` table includes a `role` column:
+- Default value: `'user'`
+- Constraint: `CHECK (role IN ('admin', 'user'))`
+- Existing users automatically receive the 'user' role
+
+### Authentication Flow
+1. User logs in via email/password or OAuth
+2. Upon successful authentication, the system fetches the user's profile including role
+3. Based on role, user is redirected to appropriate dashboard:
+   - Admin users: `/admin/dashboard`
+   - Regular users: `/dashboard`
+
+### Route Protection
+- **User routes** (`/dashboard`): Accessible by both 'user' and 'admin' roles
+- **Admin routes** (`/admin/dashboard`): Accessible only by 'admin' role
+- **Access handling**: Attempts to access unauthorized routes redirect to `/access-denied`
+
+### Admin Dashboard
+The admin dashboard (`/admin/dashboard`) provides:
+- View all users with profile information
+- Update user roles (promote/demote between admin and user)
+- Navigation back to user dashboard
 
 ## Available MCP Servers
 This project includes the Supabase MCP server for database operations:

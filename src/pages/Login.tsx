@@ -18,7 +18,13 @@ export default function Login() {
     setLoading(true)
     try {
       await signIn(email, password)
-      navigate('/dashboard', { replace: true })
+      // After successful login, check role and redirect appropriately
+      const { user } = useAuth()
+      if (user?.role === 'admin') {
+        navigate('/admin/dashboard', { replace: true })
+      } else {
+        navigate('/dashboard', { replace: true })
+      }
     } catch (err: any) {
       // Map Supabase errors to user-friendly messages
       const message = err.message?.includes('invalid login')
@@ -37,6 +43,7 @@ export default function Login() {
       await signInWithGoogle()
       // Note: Supabase handles the redirect internally after OAuth
       // The user will be redirected back to the app and then to dashboard via AuthProvider
+      // Role-based redirect will be handled in the auth/callback route or AuthProvider
     } catch (err: any) {
       setError('Google sign in failed. Please try again.')
       console.error('Google sign in error:', err)

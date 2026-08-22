@@ -27,16 +27,56 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+      if (session?.user) {
+        // Fetch profile including role
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+          .then(({ data: profile, error }) => {
+            if (!error && profile) {
+              // Merge user data with profile data
+              setUser({
+                ...session.user,
+                ...profile
+              });
+            } else {
+              setUser(session.user);
+            }
+            setLoading(false);
+          });
+      } else {
+        setUser(null);
+        setLoading(false);
+      }
+    });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setUser(session?.user ?? null)
+        if (session?.user) {
+          // Fetch profile including role on auth change
+          supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
+            .then(({ data: profile, error }) => {
+              if (!error && profile) {
+                setUser({
+                  ...session.user,
+                  ...profile
+                });
+              } else {
+                setUser(session.user);
+              }
+            });
+        } else {
+          setUser(null);
+        }
       }
-    )
+    );
 
     return () => {
       subscription.unsubscribe()
