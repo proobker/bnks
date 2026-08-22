@@ -42,19 +42,19 @@ export default function RootLayout({
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
                     <a
-                      href="/app/assessment"
+                      href="/assessment"
                       className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-indigo-700 hover:bg-gray-50"
                     >
                       School Assessment
                     </a>
                     <a
-                      href="/app/student"
+                      href="/student"
                       className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-indigo-700 hover:bg-gray-50"
                     >
                       Student Survey
                     </a>
                     <a
-                      href="/app/recommendations"
+                      href="/recommendations"
                       className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-indigo-700 hover:bg-gray-50"
                     >
                       Recommendations
@@ -65,7 +65,7 @@ export default function RootLayout({
               <div className="hidden md:block">
                 <div className="ml-4 flex items-baseline md:ml-6">
                   <a
-                    href="/app/assessment"
+                    href="/assessment"
                     className="rounded-md px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                   >
                     Get Started

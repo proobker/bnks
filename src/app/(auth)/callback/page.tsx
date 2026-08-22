@@ -19,9 +19,9 @@ export default function AuthCallback() {
 
       // Redirect to appropriate dashboard
       if (isTeacher) {
-        router.replace('/app/assessment');
+        router.replace('/assessment');
       } else {
-        router.replace('/app/student');
+        router.replace('/student');
       }
     }
   }, [router, user]);

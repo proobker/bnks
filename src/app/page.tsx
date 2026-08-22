@@ -15,13 +15,13 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/app/assessment"
+                href="/assessment"
                 className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-lg font-medium transition-colors"
               >
                 Start School Assessment
               </a>
               <a
-                href="/app/student"
+                href="/student"
                 className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-md hover:bg-indigo-50 text-lg font-medium transition-colors"
               >
                 Take Student Survey
@@ -187,13 +187,13 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="/app/assessment"
+              href="/assessment"
               className="px-6 py-3 bg-white text-indigo-600 rounded-md hover:bg-indigo-50 text-lg font-medium transition-colors"
             >
               Begin School Assessment
             </a>
             <a
-              href="/app/student"
+              href="/student"
               className="px-6 py-3 bg-white text-white rounded-md hover:bg-indigo-50 text-lg font-medium transition-colors"
             >
               Take Student Survey
