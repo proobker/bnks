@@ -1,50 +1,58 @@
-import { Navigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+'use client';
+
+import { useRouter, usePathname } from 'next/navigation';
+import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from 'react';
 
 // Base protected route (requires login)
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth()
-  const location = useLocation()
+export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const pathname = usePathname() || '/';
+  const router = useRouter();
 
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />
-  }
+  useEffect(() => {
+    if (!user) {
+      router.replace(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+    }
+  }, [user, pathname, router]);
 
-  return children
+  return children;
 }
 
 // User-only route (requires user role)
-function UserProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth()
-  const location = useLocation()
+export function UserProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const pathname = usePathname() || '/';
+  const router = useRouter();
 
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />
-  }
+  useEffect(() => {
+    if (!user) {
+      router.replace(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    if (user.role !== 'user' && user.role !== 'admin') {
+      router.replace('/access-denied');
+    }
+  }, [user, pathname, router]);
 
-  if (user.role !== 'user' && user.role !== 'admin') {
-    // Redirect to appropriate dashboard or show access denied
-    return <Navigate to="/access-denied" replace />
-  }
-
-  return children
+  return children;
 }
 
 // Admin-only route (requires admin role)
-function AdminProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth()
-  const location = useLocation()
+export function AdminProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const pathname = usePathname() || '/';
+  const router = useRouter();
 
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />
-  }
+  useEffect(() => {
+    if (!user) {
+      router.replace(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    if (user.role !== 'admin') {
+      router.replace('/access-denied');
+    }
+  }, [user, pathname, router]);
 
-  if (user.role !== 'admin') {
-    // Redirect to user dashboard or show access denied
-    return <Navigate to="/access-denied" replace />
-  }
-
-  return children
+  return children;
 }
-
-export { ProtectedRoute, UserProtectedRoute, AdminProtectedRoute }

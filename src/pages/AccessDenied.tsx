@@ -1,15 +1,15 @@
 import { useAuth } from '../contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 
 export default function AccessDenied() {
   const { user } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const handleGoBack = () => {
     if (user?.role === 'admin') {
-      navigate('/admin/dashboard')
+      router.push('/admin/dashboard')
     } else {
-      navigate('/dashboard')
+      router.push('/dashboard')
     }
   }
 

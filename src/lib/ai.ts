@@ -3,11 +3,6 @@
 // Template-based initially, designed for easy LLM integration (Gemini/NVIDIA API) later
 import type {
   SchoolProfile,
-  InfrastructureAssessment,
-  TeacherReadinessAssessment,
-  SchoolManagementAssessment,
-  LearningRequirementsAssessment,
-  StudentSurvey,
   EdTechTool,
   CompatibilityResult,
   ExplanationResult
@@ -82,7 +77,7 @@ export const generateExplanation = (
  * Returns month-by-month actionable steps
  */
 export const generateImplementationPlan = (
-  school: SchoolProfile,
+  _school: SchoolProfile,
   tool: EdTechTool,
   result: CompatibilityResult
 ): ExplanationResult['implementationPlan'] => {
@@ -205,21 +200,6 @@ export const generateExplanationResult = (
     implementationPlan: generateImplementationPlan(school, tool, compatibilityResult),
     generatedAt: new Date().toISOString()
   };
-};
-
-// Template responses for different score ranges (can be replaced with LLM later)
-const scoreRangeTemplates = {
-  excellent: (schoolName: string, toolName: string) =>
-    `${schoolName} shows strong readiness for implementing ${toolName}. The school has adequate infrastructure, teacher capabilities, and student access to support successful adoption.`,
-
-  good: (schoolName: string, toolName: string) =>
-    `${schoolName} is moderately ready for ${toolName} implementation. Some preparation in specific areas would ensure successful adoption.`,
-
-  moderate: (schoolName: string, toolName: string) =>
-    `${schoolName} has limited readiness for ${toolName} at this time. Significant preparation would be needed before considering implementation.`,
-
-  poor: (schoolName: string, toolName: string) =>
-    `${schoolName} currently lacks the necessary infrastructure and readiness for ${toolName} implementation. Consider addressing fundamental gaps first.`
 };
 
 export default { generateExplanation, generateImplementationPlan, generateExplanationResult };

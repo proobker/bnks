@@ -2,13 +2,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 export default function StudentGoogleButton() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
   const { signIn } = useAuth();
 
   const handleGoogleLogin = async () => {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -9,8 +9,8 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
-  const { signIn, signInWithGoogle } = useAuth()
-  const navigate = useNavigate()
+  const { signIn, signInWithGoogle, user } = useAuth()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -19,11 +19,10 @@ export default function Login() {
     try {
       await signIn(email, password)
       // After successful login, check role and redirect appropriately
-      const { user } = useAuth()
       if (user?.role === 'admin') {
-        navigate('/admin/dashboard', { replace: true })
+        router.replace('/admin/dashboard')
       } else {
-        navigate('/dashboard', { replace: true })
+        router.replace('/dashboard')
       }
     } catch (err: any) {
       // Map Supabase errors to user-friendly messages

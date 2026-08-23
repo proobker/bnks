@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { getSupabaseClient } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 
 export default function Dashboard() {
   const { user, signOut } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [username, setUsername] = useState('')
@@ -23,6 +23,7 @@ export default function Dashboard() {
   const fetchProfile = async () => {
     setLoading(true)
     try {
+      const supabase = getSupabaseClient()!
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -53,6 +54,7 @@ export default function Dashboard() {
         updated_at: new Date().toISOString(),
       }
 
+      const supabase = getSupabaseClient()!
       const { error } = await supabase
         .from('profiles')
         .upsert(updates, { onConflict: 'id' })
@@ -68,7 +70,7 @@ export default function Dashboard() {
 
   const handleLogout = async () => {
     await signOut()
-    navigate('/login', { replace: true })
+    router.replace('/login')
   }
 
   if (loading) return <div>Loading...</div>

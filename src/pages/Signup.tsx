@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
@@ -8,7 +8,7 @@ export default function Signup() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const { signUp } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -18,7 +18,7 @@ export default function Signup() {
       await signUp(email, password)
       // After sign up, we can redirect to dashboard or show a message.
       // For simplicity, we'll redirect to dashboard.
-      navigate('/dashboard', { replace: true })
+      router.replace('/dashboard')
     } catch (err: any) {
       setError(err.message || 'Sign up failed')
     } finally {

@@ -186,7 +186,7 @@ export default function RecommendationsPage() {
                   <div className="mb-6">
                     <h2 className="text-xl font-semibold text-gray-800 mb-4">Tool Compatibility Scores</h2>
                     <div className="space-y-4">
-                      {compatibilityResults.map((result, index) => {
+                      {compatibilityResults.map((result) => {
                         const tool = edTechTools.find(t => t.id === result.toolId);
                         return (
                           <div key={result.toolId} className="border rounded-lg p-4 hover:shadow-md transition-shadow">

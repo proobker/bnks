@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 
 export default function Landing() {
   return (
@@ -11,13 +11,13 @@ export default function Landing() {
       </p>
       <div className="space-x-4">
         <Link
-          to="/login"
+          href="/login"
           className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
         >
           Login
         </Link>
         <Link
-          to="/signup"
+          href="/signup"
           className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
         >
           Sign Up

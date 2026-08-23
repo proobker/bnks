@@ -1,15 +1,17 @@
-import { Navigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useRouter, usePathname } from 'next/navigation';
+import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from 'react';
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
-  const location = useLocation()
+  const pathname = usePathname() || '/'
+  const router = useRouter()
 
-  if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />
-  }
+  useEffect(() => {
+    if (!user) {
+      router.replace(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
+    }
+  }, [user, pathname, router])
 
   return children
 }
-
-export default ProtectedRoute

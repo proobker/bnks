@@ -82,7 +82,7 @@ export default function RootLayout({
             {children}
           </AuthProvider>
         </main>
-      </body>
+      </body>   
     </html>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { getSupabaseClient } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation'
 
 // Define the user profile type
 type Profile = {
@@ -15,7 +15,7 @@ type Profile = {
 
 export default function AdminDashboard() {
   const { user } = useAuth()
-  const navigate = useNavigate()
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [users, setUsers] = useState<Profile[]>([])
@@ -24,13 +24,14 @@ export default function AdminDashboard() {
     if (user && user.role === 'admin') {
       fetchUsers()
     } else {
-      navigate('/dashboard', { replace: true })
+      router.push('/dashboard')
     }
   }, [user])
 
   const fetchUsers = async () => {
     setLoading(true)
     try {
+      const supabase = getSupabaseClient()!
       const { data, error } = await supabase
         .from('profiles')
         .select('id, username, avatar_url, website, role, updated_at')
@@ -47,6 +48,7 @@ export default function AdminDashboard() {
 
   const updateUserRole = async (userId: string, newRole: 'admin' | 'user') => {
     try {
+      const supabase = getSupabaseClient()!
       const { error } = await supabase
         .from('profiles')
         .update({ role: newRole })
@@ -106,7 +108,7 @@ export default function AdminDashboard() {
 
           <p className="mt-4 text-sm text-gray-600">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => router.push('/dashboard')}
               className="text-gray-600 hover:underline font-medium"
             >
               Back to User Dashboard

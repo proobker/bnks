@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { getSupabaseClient } from '../lib/supabase'
 
 interface AuthContextType {
   user: any
@@ -26,6 +26,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Get initial session
+    const supabase = getSupabaseClient()
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         // Fetch profile including role
@@ -84,19 +90,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
+    const supabase = getSupabaseClient()
+    if (!supabase) {
+      throw new Error('Supabase client is not available')
+    }
     await supabase.auth.signInWithPassword({ email, password })
   }
 
   const signUp = async (email: string, password: string) => {
+    const supabase = getSupabaseClient()
+    if (!supabase) {
+      throw new Error('Supabase client is not available')
+    }
     await supabase.auth.signUp({ email, password })
     // Note: In a production app, you might want to handle email verification here.
   }
 
   const signOut = async () => {
+    const supabase = getSupabaseClient()
+    if (!supabase) {
+      throw new Error('Supabase client is not available')
+    }
     await supabase.auth.signOut()
   }
 
   const signInWithGoogle = async () => {
+    const supabase = getSupabaseClient()
+    if (!supabase) {
+      throw new Error('Supabase client is not available')
+    }
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
