@@ -12,14 +12,6 @@ import type {
 } from './types';
 
 /**
- * Calculate normalized score (0-100) from assessment data
- */
-const normalizeScore = (value: number, min: number, max: number): number => {
-  if (max === min) return 50; // Avoid division by zero
-  return Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
-};
-
-/**
  * Convert categorical assessments to numerical scores (0-100 scale)
  */
 const categoricalToScore = (value: string): number => {
@@ -45,8 +37,7 @@ const categoricalToScore = (value: string): number => {
  * Based on device count, student/device ratio, device availability, internet quality, technical support
  */
 export const calculateInfrastructureScore = (
-  infra: InfrastructureAssessment,
-  studentCount: number
+  infra: InfrastructureAssessment
 ): number => {
   // Device availability component (0-40 points)
   const deviceScore = categoricalToScore(infra.deviceAvailability) * 0.4;
@@ -150,14 +141,13 @@ export const calculateStudentAccessScore = (
  * Weighted average of all assessment dimensions
  */
 export const calculateSchoolReadinessScore = (
-  school: SchoolProfile,
   infrastructure: InfrastructureAssessment,
   teacherReadiness: TeacherReadinessAssessment,
   schoolManagement: SchoolManagementAssessment,
   learningRequirements: LearningRequirementsAssessment,
   studentSurveys: StudentSurvey[]
 ): number => {
-  const infraScore = calculateInfrastructureScore(infrastructure, school.studentCount);
+  const infraScore = calculateInfrastructureScore(infrastructure);
   const teacherScore = calculateTeacherReadinessScore(teacherReadiness);
   const managementScore = calculateSchoolManagementScore(schoolManagement);
   const learningScore = calculateLearningRequirementsScore(learningRequirements);
@@ -187,16 +177,11 @@ export const calculateCompatibility = (
   tool: EdTechTool
 ): CompatibilityResult => {
   // Calculate dimension scores
-  const infraScore = calculateInfrastructureScore(infrastructure, school.studentCount);
+  const infraScore = calculateInfrastructureScore(infrastructure);
   const teacherScore = calculateTeacherReadinessScore(teacherReadiness);
   const managementScore = calculateSchoolManagementScore(schoolManagement);
   const learningScore = calculateLearningRequirementsScore(learningRequirements);
   const studentScore = calculateStudentAccessScore(studentSurveys);
-
-  // Overall readiness score
-  const readinessScore = calculateSchoolReadinessScore(
-    school, infrastructure, teacherReadiness, schoolManagement, learningRequirements, studentSurveys
-  );
 
   // Calculate tool-specific compatibility
   // Device compatibility: how well school device readiness meets tool requirements
