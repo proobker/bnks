@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { events } from '@/data/events';
 import {
   getEventMatches,
@@ -8,6 +8,8 @@ import {
   formatEventDate,
   daysUntil
 } from '@/lib/event-matching';
+import { createBrowserSupabaseClient } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
 import type {
   RankedEvent,
   StudentEventProfile,
@@ -37,6 +39,12 @@ const defaultProfile: StudentEventProfile = {
   budgetPreference: 'Any',
   participationPreference: 'Either'
 };
+
+const NO_SAVES: Set<string> = new Set();
+
+// Personal saves ship behind this flag until the saved_events table is created
+// in Supabase (see TODO-saved-events.md). Flip to true to re-enable everything.
+const SAVES_ENABLED = false;
 
 const verificationStyles: Record<VerificationStatus, string> = {
   VERIFIED: 'bg-green-100 text-green-800 border-green-300',
@@ -69,12 +77,56 @@ function scoreBarColor(score: number): string {
 }
 
 export default function EventFinder() {
+  const { user } = useAuth();
   const [form, setForm] = useState<StudentEventProfile>(defaultProfile);
   const [student, setStudent] = useState<StudentEventProfile>(defaultProfile);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [openOnly, setOpenOnly] = useState(true);
   const [includePast, setIncludePast] = useState(false);
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+
+  // Personal saves - viewing is public, saving requires login
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const [loginPromptId, setLoginPromptId] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user || !SAVES_ENABLED) return;
+    supabase
+      .from('saved_events')
+      .select('event_id')
+      .eq('user_id', user.id)
+      .then(({ data, error }) => {
+        if (!error && data) setSavedIds(new Set(data.map(row => row.event_id)));
+      });
+  }, [user, supabase]);
+
+  // Logged-out visitors never see persisted saves
+  const visibleSaved = user ? savedIds : NO_SAVES;
+
+  const toggleSave = async (eventId: string) => {
+    if (!user) {
+      setLoginPromptId(prev => (prev === eventId ? null : eventId));
+      return;
+    }
+    const isSaved = savedIds.has(eventId);
+    const next = new Set(savedIds);
+    if (isSaved) next.delete(eventId);
+    else next.add(eventId);
+    setSavedIds(next);
+
+    const query = isSaved
+      ? supabase.from('saved_events').delete().eq('user_id', user.id).eq('event_id', eventId)
+      : supabase.from('saved_events').insert({ user_id: user.id, event_id: eventId });
+
+    const { error } = await query;
+    if (error) {
+      setSavedIds(savedIds); // rollback
+      setSaveError('Could not update your saved events. Please try again.');
+      setTimeout(() => setSaveError(null), 4000);
+    }
+  };
 
   const allMatches = useMemo(
     () => getEventMatches(student, events, { includePast }),
@@ -260,9 +312,21 @@ export default function EventFinder() {
       </div>
 
       {/* Results */}
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">
+      <h3 className="text-lg font-semibold text-gray-800 mb-1">
         Your Event Matches ({visibleMatches.length})
+        {SAVES_ENABLED && user && visibleSaved.size > 0 && (
+          <span className="ml-2 text-sm font-normal text-rose-500">♥ {visibleSaved.size} saved</span>
+        )}
       </h3>
+      {SAVES_ENABLED && !user && (
+        <p className="text-xs text-gray-500 mb-4">
+          Browsing is free — log in to save events to your personal list.
+        </p>
+      )}
+
+      {SAVES_ENABLED && saveError && (
+        <p className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">{saveError}</p>
+      )}
 
       {visibleMatches.length === 0 ? (
         <p className="text-gray-500 text-center py-12 bg-white rounded-lg border">
@@ -389,12 +453,35 @@ export default function EventFinder() {
                   </div>
                 )}
 
-                <button
-                  onClick={() => setExpandedId(isExpanded ? null : ev.id)}
-                  className="mt-3 text-sm text-indigo-600 hover:text-indigo-800 font-medium"
-                >
-                  {isExpanded ? 'Hide Details ↑' : 'View Details ↓'}
-                </button>
+                <div className={`mt-3 flex items-center gap-3 ${SAVES_ENABLED ? 'justify-between' : 'justify-end'}`}>
+                  {SAVES_ENABLED && (
+                    <button
+                      onClick={() => toggleSave(ev.id)}
+                      className={`text-sm font-medium px-3 py-1.5 rounded-md border transition-colors ${
+                        visibleSaved.has(ev.id)
+                          ? 'border-rose-200 bg-rose-50 text-rose-600'
+                          : 'border-gray-300 text-gray-600 hover:border-indigo-400 hover:text-indigo-600'
+                      }`}
+                    >
+                      {visibleSaved.has(ev.id) ? '♥ Saved' : '♡ Save'}
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setExpandedId(isExpanded ? null : ev.id)}
+                    className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                  >
+                    {isExpanded ? 'Hide Details ↑' : 'View Details ↓'}
+                  </button>
+                </div>
+
+                {SAVES_ENABLED && loginPromptId === ev.id && !user && (
+                  <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-800">
+                    Log in to save events to your personal list.{' '}
+                    <a href="/student-login" className="font-medium underline text-indigo-600 hover:text-indigo-800">
+                      Log in
+                    </a>
+                  </div>
+                )}
               </div>
             );
           })}
