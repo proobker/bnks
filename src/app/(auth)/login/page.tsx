@@ -1,17 +1,17 @@
-// src/app/(auth)/teacher-signup/page.tsx
+// src/app/(auth)/login/page.tsx
 import EmailAuthForm from '@/components/auth/EmailAuthForm';
 import { authMetadata } from '@/layouts/auth-layout';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Teacher Sign Up - EduFit Nepal",
+  title: "Sign In - EduFit Nepal",
   ...authMetadata,
 };
 
-export default function TeacherSignupPage() {
+export default function LoginPage() {
   return (
     <>
-      <EmailAuthForm role="teacher" mode="signup" />
+      <EmailAuthForm mode="login" />
     </>
   );
 }

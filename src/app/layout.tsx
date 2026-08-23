@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from '@/context/AuthContext';
+import NavAuth from '@/components/auth/NavAuth';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,8 +30,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {/* Navigation */}
-        <nav className="bg-white border-b shadow-sm">
+        <AuthProvider>
+          {/* Navigation */}
+          <nav className="bg-white border-b shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex">
@@ -63,26 +65,18 @@ export default function RootLayout({
                 </div>
               </div>
               <div className="hidden md:block">
-                <div className="ml-4 flex items-baseline md:ml-6">
-                  <a
-                    href="/assessment"
-                    className="rounded-md px-3 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                  >
-                    Get Started
-                  </a>
-                </div>
+                <NavAuth />
               </div>
             </div>
           </div>
         </nav>
 
-        {/* Main Content with Auth Provider */}
+        {/* Main Content */}
         <main className="flex-1">
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          {children}
         </main>
-      </body>   
+        </AuthProvider>
+      </body>
     </html>
   );
 }

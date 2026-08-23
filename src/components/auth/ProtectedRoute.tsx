@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  role?: 'teacher' | 'student'; // Optional role-based protection
+  role?: 'teacher' | 'student';
 }
 
 export default function ProtectedRoute({
@@ -21,33 +21,21 @@ export default function ProtectedRoute({
     if (isLoading) return;
 
     if (!user) {
-      // Redirect to appropriate login page based on role
-      router.replace(role === 'teacher' ? '/teacher-login' : '/student-login');
+      router.replace('/login');
       return;
     }
 
-    // Role-based protection (if specified)
-    if (role) {
-      // For now, we'll determine role by login method or email pattern
-      // In production, you'd check user_metadata.role or similar
-      const isTeacherLogin = user.email?.includes('@teacher') ||
-                            // Add logic to determine if user is teacher
-                            false; // Placeholder - would check actual role from DB or metadata
-      const isStudentLogin = user.email?.includes('@student') ||
-                            // Add logic to determine if user is student
-                            false; // Placeholder
-
-      if ((role === 'teacher' && !isTeacherLogin) ||
-          (role === 'student' && !isStudentLogin)) {
-        // Redirect to appropriate login page
-        router.replace(role === 'teacher' ? '/teacher-login' : '/student-login');
-        return;
-      }
+    if (role && user.role !== role && user.role !== 'admin') {
+      router.replace('/access-denied');
     }
   }, [router, user, isLoading, role]);
 
   if (isLoading) {
-    return <div className="min-h-flex items-center justify-center">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    );
   }
 
   return children;

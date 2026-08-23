@@ -25,7 +25,7 @@ export default function AdminDashboardPage() {
     if (isLoading) return
 
     if (!user) {
-      router.replace('/teacher-login')
+      router.replace('/login')
       return
     }
 

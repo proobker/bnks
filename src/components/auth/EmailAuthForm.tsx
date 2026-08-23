@@ -12,9 +12,10 @@ import {
 import { redirectPathForRole } from '@/lib/auth';
 
 interface EmailAuthFormProps {
-  role: 'teacher' | 'student';
   mode: 'login' | 'signup';
 }
+
+type Role = 'teacher' | 'student';
 
 const copy = {
   teacher: {
@@ -31,7 +32,8 @@ const copy = {
   },
 };
 
-export default function EmailAuthForm({ role, mode }: EmailAuthFormProps) {
+export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
+  const [role, setRole] = useState<Role>('student');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +42,11 @@ export default function EmailAuthForm({ role, mode }: EmailAuthFormProps) {
   const { signIn } = useAuth();
   const router = useRouter();
   const t = copy[role];
+
+  const switchRole = (next: Role) => {
+    setRole(next);
+    setError(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +88,7 @@ export default function EmailAuthForm({ role, mode }: EmailAuthFormProps) {
         </p>
         <div className="mt-6 text-center">
           <Link
-            href={`/${role}-login`}
+            href="/login"
             className="text-indigo-600 hover:underline font-medium"
           >
             Back to login
@@ -96,6 +103,32 @@ export default function EmailAuthForm({ role, mode }: EmailAuthFormProps) {
       <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
         {mode === 'login' ? t.loginTitle : t.signupTitle}
       </h2>
+
+      <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
+        <button
+          type="button"
+          onClick={() => switchRole('teacher')}
+          className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
+            role === 'teacher'
+              ? 'bg-white text-indigo-600 shadow-sm'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          I&apos;m a Teacher
+        </button>
+        <button
+          type="button"
+          onClick={() => switchRole('student')}
+          className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
+            role === 'student'
+              ? 'bg-white text-indigo-600 shadow-sm'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          I&apos;m a Student
+        </button>
+      </div>
+
       <p className="text-gray-600 mb-6 text-center">
         {mode === 'login' ? t.loginSubtitle : t.signupSubtitle}
       </p>
@@ -157,14 +190,14 @@ export default function EmailAuthForm({ role, mode }: EmailAuthFormProps) {
         {mode === 'login' ? (
           <>
             Don&apos;t have an account?{' '}
-            <Link href={`/${role}-signup`} className="text-indigo-600 hover:underline font-medium">
+            <Link href="/signup" className="text-indigo-600 hover:underline font-medium">
               Sign up
             </Link>
           </>
         ) : (
           <>
             Already have an account?{' '}
-            <Link href={`/${role}-login`} className="text-indigo-600 hover:underline font-medium">
+            <Link href="/login" className="text-indigo-600 hover:underline font-medium">
               Sign in
             </Link>
           </>

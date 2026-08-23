@@ -156,7 +156,7 @@ export default function RecommendationsPage() {
                 Browse and view all student events below for free. Log in only to save events
                 or see EdTech compatibility results for your school.
               </p>
-              <a href="/student-login" className="inline-block px-5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm font-medium">
+              <a href="/login" className="inline-block px-5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm font-medium">
                 Log in / Sign up
               </a>
             </div>

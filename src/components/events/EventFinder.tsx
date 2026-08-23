@@ -477,7 +477,7 @@ export default function EventFinder() {
                 {SAVES_ENABLED && loginPromptId === ev.id && !user && (
                   <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-800">
                     Log in to save events to your personal list.{' '}
-                    <a href="/student-login" className="font-medium underline text-indigo-600 hover:text-indigo-800">
+                    <a href="/login" className="font-medium underline text-indigo-600 hover:text-indigo-800">
                       Log in
                     </a>
                   </div>

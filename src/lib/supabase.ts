@@ -39,6 +39,7 @@ export const signUpWithEmailPassword = async (
     password,
     options: {
       data: { role },
+      emailRedirectTo: `${window.location.origin}/login`,
     },
   });
   if (error) throw error;

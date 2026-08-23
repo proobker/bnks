@@ -115,7 +115,8 @@ create trigger on_auth_user_created
 insert into public.profiles (id, username, role)
 values
     ('6571160c-7b08-4961-a0fa-04a31edc7ace', 'Test Teacher', 'teacher'),
-    ('73e1f98d-3de3-4ee0-9526-8c4675ae3de2', 'Test Student', 'student')
+    ('73e1f98d-3de3-4ee0-9526-8c4675ae3de2', 'Test Student', 'student'),
+    ('551bc5d5-d387-4d6e-950d-e106c850a91c', 'Test Admin', 'admin')
 on conflict (id) do update
     set username = excluded.username,
         role = excluded.role;
