@@ -33,7 +33,7 @@ export default function ProtectedRoute({
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+        <p className="text-slate-600">Loading...</p>
       </div>
     );
   }

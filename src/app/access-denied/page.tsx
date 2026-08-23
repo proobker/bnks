@@ -16,18 +16,18 @@ export default function AccessDeniedPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-gray-50">
-      <div className="text-center">
-        <svg className="h-12 w-12 text-red-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="min-h-screen flex flex-col items-center justify-center p-8">
+      <div className="bg-white rounded-[14px] shadow-card p-10 text-center max-w-md">
+        <svg className="h-12 w-12 text-danger mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Access Denied</h1>
-        <p className="text-gray-600 mb-6">
+        <h1 className="text-2xl font-bold text-ink tracking-tight mb-4">Access Denied</h1>
+        <p className="text-slate-600 mb-6">
           You don't have permission to access this resource. Please contact your administrator if you believe this is an error.
         </p>
         <button
           onClick={handleGoBack}
-          className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
+          className="px-6 py-3 bg-primary text-white font-medium rounded-lg shadow-primary hover:bg-primary-hover transition"
         >
           Go Back to Dashboard
         </button>

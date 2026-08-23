@@ -78,18 +78,18 @@ export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
 
   if (confirmationSent) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-8 w-full">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+      <div className="bg-white rounded-[14px] shadow-card p-8 w-full">
+        <h2 className="text-2xl font-bold text-ink mb-4 text-center">
           Confirm your email
         </h2>
-        <p className="text-gray-600 text-center">
+        <p className="text-slate-600 text-center">
           We sent a confirmation link to <strong>{email}</strong>. Click it to
           activate your account, then sign in.
         </p>
         <div className="mt-6 text-center">
           <Link
             href="/login"
-            className="text-indigo-600 hover:underline font-medium"
+            className="text-primary hover:underline font-medium"
           >
             Back to login
           </Link>
@@ -99,19 +99,19 @@ export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-8 w-full">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+    <div className="bg-white rounded-[14px] shadow-card p-8 w-full">
+      <h2 className="text-2xl font-bold text-ink mb-6 text-center">
         {mode === 'login' ? t.loginTitle : t.signupTitle}
       </h2>
 
-      <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
+      <div className="flex mb-6 bg-slate-100 rounded-lg p-1">
         <button
           type="button"
           onClick={() => switchRole('teacher')}
           className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
             role === 'teacher'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'bg-white text-primary shadow-sm'
+              : 'text-slate-500 hover:text-slate-700'
           }`}
         >
           I&apos;m a Teacher
@@ -121,15 +121,15 @@ export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
           onClick={() => switchRole('student')}
           className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
             role === 'student'
-              ? 'bg-white text-indigo-600 shadow-sm'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'bg-white text-primary shadow-sm'
+              : 'text-slate-500 hover:text-slate-700'
           }`}
         >
           I&apos;m a Student
         </button>
       </div>
 
-      <p className="text-gray-600 mb-6 text-center">
+      <p className="text-slate-600 mb-6 text-center">
         {mode === 'login' ? t.loginSubtitle : t.signupSubtitle}
       </p>
 
@@ -141,7 +141,7 @@ export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Email Address
           </label>
           <input
@@ -150,14 +150,14 @@ export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+            className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
             disabled={isLoading}
             placeholder="Enter your email"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Password
           </label>
           <input
@@ -167,7 +167,7 @@ export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
             required
             minLength={6}
             autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+            className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
             disabled={isLoading}
             placeholder={mode === 'signup' ? 'At least 6 characters' : 'Enter your password'}
           />
@@ -176,7 +176,7 @@ export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-primary text-sm font-medium text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
         >
           {isLoading
             ? 'Please wait...'
@@ -186,18 +186,18 @@ export default function EmailAuthForm({ mode }: EmailAuthFormProps) {
         </button>
       </form>
 
-      <div className="text-center text-sm text-gray-500 mt-4">
+      <div className="text-center text-sm text-slate-500 mt-4">
         {mode === 'login' ? (
           <>
             Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-indigo-600 hover:underline font-medium">
+            <Link href="/signup" className="text-primary hover:underline font-medium">
               Sign up
             </Link>
           </>
         ) : (
           <>
             Already have an account?{' '}
-            <Link href="/login" className="text-indigo-600 hover:underline font-medium">
+            <Link href="/login" className="text-primary hover:underline font-medium">
               Sign in
             </Link>
           </>

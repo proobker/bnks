@@ -53,11 +53,11 @@ const verificationStyles: Record<VerificationStatus, string> = {
 };
 
 const statusStyles: Record<EventStatus, string> = {
-  UPCOMING: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+  UPCOMING: 'bg-primary-soft text-primary-hover border-primary/25',
   REGISTRATION_OPEN: 'bg-green-50 text-green-700 border-green-200',
-  REGISTRATION_CLOSED: 'bg-gray-100 text-gray-600 border-gray-200',
+  REGISTRATION_CLOSED: 'bg-slate-100 text-slate-600 border-slate-200',
   ONGOING: 'bg-purple-50 text-purple-700 border-purple-200',
-  COMPLETED: 'bg-gray-100 text-gray-500 border-gray-200',
+  COMPLETED: 'bg-slate-100 text-slate-500 border-slate-200',
   CANCELLED: 'bg-red-50 text-red-600 border-red-200',
   UNKNOWN: 'bg-amber-50 text-amber-800 border-amber-200'
 };
@@ -183,23 +183,23 @@ export default function EventFinder() {
   );
 
   return (
-    <div className="mt-10 pt-8 border-t border-gray-200">
-      <h2 className="text-2xl font-bold text-indigo-800 flex items-center">
+    <div className="mt-10 pt-8 border-t border-slate-200">
+      <h2 className="text-2xl font-bold text-ink flex items-center">
         <span className="mr-2">🏆</span> Nepal Student Events & Competitions Finder
       </h2>
-      <p className="text-sm text-gray-600 mt-1 mb-4">
+      <p className="text-sm text-slate-600 mt-1 mb-4">
         Discover hackathons, competitions and workshops near you - with verified
         sources, deadlines and transparent match explanations.
       </p>
 
       {/* Student profile form */}
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-indigo-50 rounded-lg p-4 mb-4">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-surface-muted rounded-[10px] p-4 mb-4">
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Education level</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Education level</label>
           <select
             value={form.educationLevel}
             onChange={e => setForm({ ...form, educationLevel: e.target.value as EducationLevel })}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm"
           >
             {educationLevels.map(level => (
               <option key={level} value={level}>{level}</option>
@@ -208,11 +208,11 @@ export default function EventFinder() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Location</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Location</label>
           <select
             value={form.preferredLocation}
             onChange={e => setForm({ ...form, preferredLocation: e.target.value })}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm"
           >
             {locations.map(location => (
               <option key={location} value={location}>{location}</option>
@@ -221,13 +221,13 @@ export default function EventFinder() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Budget</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Budget</label>
           <select
             value={form.budgetPreference}
             onChange={e =>
               setForm({ ...form, budgetPreference: e.target.value as 'Free only' | 'Any' })
             }
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm"
           >
             <option value="Any">Any cost</option>
             <option value="Free only">Free only</option>
@@ -235,7 +235,7 @@ export default function EventFinder() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Participation</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Participation</label>
           <select
             value={form.participationPreference}
             onChange={e =>
@@ -244,7 +244,7 @@ export default function EventFinder() {
                 participationPreference: e.target.value as 'Team' | 'Individual' | 'Either'
               })
             }
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm"
           >
             <option value="Either">Either</option>
             <option value="Team">Team events</option>
@@ -253,7 +253,7 @@ export default function EventFinder() {
         </div>
 
         <div className="sm:col-span-2 lg:col-span-4">
-          <label className="block text-xs font-medium text-gray-700 mb-1">Interests</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Interests</label>
           <div className="flex flex-wrap gap-2">
             {interestOptions.map(interest => (
               <button
@@ -262,8 +262,8 @@ export default function EventFinder() {
                 onClick={() => toggleInterest(interest)}
                 className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
                   form.interests.includes(interest)
-                    ? 'bg-indigo-600 text-white border-indigo-600'
-                    : 'bg-white text-gray-700 border-gray-300 hover:border-indigo-400'
+                    ? 'bg-primary text-white border-primary'
+                    : 'bg-white text-slate-700 border-slate-300 hover:border-primary-hover'
                 }`}
               >
                 {interest}
@@ -275,7 +275,7 @@ export default function EventFinder() {
         <div className="sm:col-span-2 lg:col-span-4">
           <button
             type="submit"
-            className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm font-medium"
+            className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-hover text-sm font-medium"
           >
             Find Events
           </button>
@@ -289,9 +289,9 @@ export default function EventFinder() {
           placeholder="Search event, organizer or category..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="flex-1 min-w-[220px] border border-gray-300 rounded-md px-3 py-2 text-sm"
+          className="flex-1 min-w-[220px] border border-slate-300 rounded-md px-3 py-2 text-sm"
         />
-        <label className="flex items-center gap-2 text-sm text-gray-700">
+        <label className="flex items-center gap-2 text-sm text-slate-700">
           <input
             type="checkbox"
             checked={openOnly}
@@ -300,7 +300,7 @@ export default function EventFinder() {
           />
           Registration open only
         </label>
-        <label className="flex items-center gap-2 text-sm text-gray-700">
+        <label className="flex items-center gap-2 text-sm text-slate-700">
           <input
             type="checkbox"
             checked={includePast}
@@ -312,14 +312,14 @@ export default function EventFinder() {
       </div>
 
       {/* Results */}
-      <h3 className="text-lg font-semibold text-gray-800 mb-1">
+      <h3 className="text-lg font-semibold text-slate-800 mb-1">
         Your Event Matches ({visibleMatches.length})
         {SAVES_ENABLED && user && visibleSaved.size > 0 && (
           <span className="ml-2 text-sm font-normal text-rose-500">♥ {visibleSaved.size} saved</span>
         )}
       </h3>
       {SAVES_ENABLED && !user && (
-        <p className="text-xs text-gray-500 mb-4">
+        <p className="text-xs text-slate-500 mb-4">
           Browsing is free — log in to save events to your personal list.
         </p>
       )}
@@ -329,7 +329,7 @@ export default function EventFinder() {
       )}
 
       {visibleMatches.length === 0 ? (
-        <p className="text-gray-500 text-center py-12 bg-white rounded-lg border">
+        <p className="text-slate-500 text-center py-12 bg-white rounded-lg border">
           No events match your filters. Try widening your criteria or enabling past events.
         </p>
       ) : (
@@ -345,11 +345,11 @@ export default function EventFinder() {
               <div key={ev.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
                 <div className="flex flex-wrap justify-between items-start gap-3 mb-3">
                   <div>
-                    <h4 className="font-semibold text-gray-900">{ev.title}</h4>
-                    <p className="text-sm text-gray-600">
+                    <h4 className="font-semibold text-slate-900">{ev.title}</h4>
+                    <p className="text-sm text-slate-600">
                       Organized by {ev.organization_name}
                       {deadlineDays !== null && (
-                        <span className={deadlineDays <= 7 ? ' text-red-600 font-medium' : ' text-gray-500'}>
+                        <span className={deadlineDays <= 7 ? ' text-red-600 font-medium' : ' text-slate-500'}>
                           {' '}· closes in {deadlineDays} day{deadlineDays === 1 ? '' : 's'}
                         </span>
                       )}
@@ -365,7 +365,7 @@ export default function EventFinder() {
                             ? '✓ Cross-checked'
                             : '✓ Verified'}
                       </span>
-                      <span className="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                      <span className="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-primary-soft text-primary-hover border border-primary/25">
                         {ev.event_type} · {ev.category}
                       </span>
                     </div>
@@ -374,29 +374,29 @@ export default function EventFinder() {
                     <div className={`text-3xl font-bold ${scoreColor(match.score)}`}>
                       {match.score}%
                     </div>
-                    <p className="text-xs text-gray-500">Match ({match.earnedPoints}/{match.applicablePoints} pts)</p>
+                    <p className="text-xs text-slate-500">Match ({match.earnedPoints}/{match.applicablePoints} pts)</p>
                   </div>
                 </div>
 
-                <div className="w-full bg-gray-200 rounded-full h-2.5 mb-3">
+                <div className="w-full bg-slate-200 rounded-full h-2.5 mb-3">
                   <div
                     className={`h-2.5 rounded-full ${scoreBarColor(match.score)} transition-all duration-500`}
                     style={{ width: `${match.score}%` }}
                   ></div>
                 </div>
 
-                <p className="text-sm text-gray-700 mb-3">{ev.description}</p>
+                <p className="text-sm text-slate-700 mb-3">{ev.description}</p>
 
                 <div className="mb-3">
-                  <h5 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-1">Why this matches you:</h5>
+                  <h5 className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-1">Why this matches you:</h5>
                   <ul className="list-none space-y-0.5">{renderExplanations(match)}</ul>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm mb-3">
-                  <p><strong className="text-gray-700">Deadline:</strong> {formatEventDate(ev.registration_deadline)}</p>
-                  <p><strong className="text-gray-700">When:</strong> {formatEventDate(ev.start_date)}{ev.end_date ? ` – ${formatEventDate(ev.end_date)}` : ''}</p>
-                  <p><strong className="text-gray-700">Where:</strong> {ev.location}{ev.format !== 'UNKNOWN' ? ` (${ev.format.toLowerCase()})` : ''}</p>
-                  <p><strong className="text-gray-700">Entry:</strong> {formatFee(ev)}</p>
+                  <p><strong className="text-slate-700">Deadline:</strong> {formatEventDate(ev.registration_deadline)}</p>
+                  <p><strong className="text-slate-700">When:</strong> {formatEventDate(ev.start_date)}{ev.end_date ? ` – ${formatEventDate(ev.end_date)}` : ''}</p>
+                  <p><strong className="text-slate-700">Where:</strong> {ev.location}{ev.format !== 'UNKNOWN' ? ` (${ev.format.toLowerCase()})` : ''}</p>
+                  <p><strong className="text-slate-700">Entry:</strong> {formatFee(ev)}</p>
                 </div>
 
                 {(ev.prize_information || ev.certificate_available) && (
@@ -414,10 +414,10 @@ export default function EventFinder() {
                   </div>
                 )}
 
-                <p className="text-sm italic text-gray-600 mb-3">{match.recommendation}</p>
+                <p className="text-sm italic text-slate-600 mb-3">{match.recommendation}</p>
 
                 {isExpanded && (
-                  <div className="border-t border-gray-100 pt-3 mt-3 text-sm text-gray-700 space-y-1">
+                  <div className="border-t border-slate-100 pt-3 mt-3 text-sm text-slate-700 space-y-1">
                     <p><strong>Eligibility:</strong> {ev.eligibility}</p>
                     {ev.participation !== 'UNKNOWN' && (
                       <p>
@@ -434,7 +434,7 @@ export default function EventFinder() {
                     {ev.benefits.length > 0 && <p><strong>Benefits:</strong> {ev.benefits.join(', ')}</p>}
                     <p>
                       <strong>Source:</strong>{' '}
-                      <a href={ev.source_url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline break-all">
+                      <a href={ev.source_url} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all">
                         {ev.source_url}
                       </a>{' '}
                       ({ev.source_type}, checked {ev.last_verified})
@@ -444,12 +444,12 @@ export default function EventFinder() {
                         href={ev.registration_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block mt-2 px-4 py-1.5 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm font-medium"
+                        className="inline-block mt-2 px-4 py-1.5 bg-primary text-white rounded-md hover:bg-primary-hover text-sm font-medium"
                       >
                         Register / Apply →
                       </a>
                     )}
-                    {ev.notes && <p className="text-gray-500"><strong>Notes:</strong> {ev.notes}</p>}
+                    {ev.notes && <p className="text-slate-500"><strong>Notes:</strong> {ev.notes}</p>}
                   </div>
                 )}
 
@@ -460,7 +460,7 @@ export default function EventFinder() {
                       className={`text-sm font-medium px-3 py-1.5 rounded-md border transition-colors ${
                         visibleSaved.has(ev.id)
                           ? 'border-rose-200 bg-rose-50 text-rose-600'
-                          : 'border-gray-300 text-gray-600 hover:border-indigo-400 hover:text-indigo-600'
+                          : 'border-slate-300 text-slate-600 hover:border-primary-hover hover:text-primary'
                       }`}
                     >
                       {visibleSaved.has(ev.id) ? '♥ Saved' : '♡ Save'}
@@ -468,7 +468,7 @@ export default function EventFinder() {
                   )}
                   <button
                     onClick={() => setExpandedId(isExpanded ? null : ev.id)}
-                    className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                    className="text-sm text-primary hover:text-primary-hover font-medium"
                   >
                     {isExpanded ? 'Hide Details ↑' : 'View Details ↓'}
                   </button>
@@ -477,7 +477,7 @@ export default function EventFinder() {
                 {SAVES_ENABLED && loginPromptId === ev.id && !user && (
                   <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-800">
                     Log in to save events to your personal list.{' '}
-                    <a href="/login" className="font-medium underline text-indigo-600 hover:text-indigo-800">
+                      <a href="/login" className="font-medium underline text-primary hover:text-primary-hover">
                       Log in
                     </a>
                   </div>

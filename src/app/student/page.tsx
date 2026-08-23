@@ -85,40 +85,40 @@ export default function StudentSurveyPage() {
   if (!isAuthenticated) {
     return (
       <ProtectedRoute role="student">
-        <div className="min-h-screen bg-gray-50 py-8">
+        <div className="min-h-screen bg-slate-50 py-8">
           <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Student Access Survey</h2>
-              <p className="text-gray-600 mb-6 text-center">
+            <div className="bg-white rounded-[10px] shadow-card p-8">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">Student Access Survey</h2>
+              <p className="text-slate-600 mb-6 text-center">
                 Help us understand your technology access to improve EdTech recommendations for your school.
               </p>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">School Code</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">School Code</label>
                   <input
                     type="text"
                     name="schoolCode"
                     value={schoolCode}
                     onChange={handleAuthChange}
                     placeholder="Enter your school code"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Student ID</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Student ID</label>
                   <input
                     type="text"
                     name="studentId"
                     value={studentId}
                     onChange={handleAuthChange}
                     placeholder="Enter your student ID"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <button
                   onClick={handleAuthenticate}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                 >
                   Authenticate
                 </button>
@@ -132,11 +132,11 @@ export default function StudentSurveyPage() {
 
   return (
     <ProtectedRoute role="student">
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-slate-50 py-8">
         <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Student Access Survey</h2>
-            <p className="text-gray-600 mb-6">
+          <div className="bg-white rounded-[10px] shadow-card p-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">Student Access Survey</h2>
+            <p className="text-slate-600 mb-6">
               Share information about your technology access to help your school make better EdTech decisions.
             </p>
 
@@ -154,7 +154,7 @@ export default function StudentSurveyPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Device Ownership</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Device Ownership</label>
                 <div className="mt-2 space-y-2">
                   <div>
                     <label className="flex items-center">
@@ -164,7 +164,7 @@ export default function StudentSurveyPage() {
                         value="laptop"
                         checked={surveyData.deviceOwnership === 'laptop'}
                         onChange={handleSurveyChange}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                        className="h-4 w-4 text-primary focus:ring-primary border-slate-300"
                       />
                       <span className="ml-2">Laptop</span>
                     </label>
@@ -177,7 +177,7 @@ export default function StudentSurveyPage() {
                         value="phone"
                         checked={surveyData.deviceOwnership === 'phone'}
                         onChange={handleSurveyChange}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                        className="h-4 w-4 text-primary focus:ring-primary border-slate-300"
                       />
                       <span className="ml-2">Smartphone</span>
                     </label>
@@ -190,7 +190,7 @@ export default function StudentSurveyPage() {
                         value="shared"
                         checked={surveyData.deviceOwnership === 'shared'}
                         onChange={handleSurveyChange}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                        className="h-4 w-4 text-primary focus:ring-primary border-slate-300"
                       />
                       <span className="ml-2">Shared Device</span>
                     </label>
@@ -203,7 +203,7 @@ export default function StudentSurveyPage() {
                         value="none"
                         checked={surveyData.deviceOwnership === 'none'}
                         onChange={handleSurveyChange}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                        className="h-4 w-4 text-primary focus:ring-primary border-slate-300"
                       />
                       <span className="ml-2">No Personal Device</span>
                     </label>
@@ -212,7 +212,7 @@ export default function StudentSurveyPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Internet Availability at Home</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Internet Availability at Home</label>
                 <div className="mt-2 space-y-2">
                   <div>
                     <label className="flex items-center">
@@ -222,7 +222,7 @@ export default function StudentSurveyPage() {
                         value="always"
                         checked={surveyData.internetAvailability === 'always'}
                         onChange={handleSurveyChange}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                        className="h-4 w-4 text-primary focus:ring-primary border-slate-300"
                       />
                       <span className="ml-2">Always</span>
                     </label>
@@ -235,7 +235,7 @@ export default function StudentSurveyPage() {
                         value="sometimes"
                         checked={surveyData.internetAvailability === 'sometimes'}
                         onChange={handleSurveyChange}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                        className="h-4 w-4 text-primary focus:ring-primary border-slate-300"
                       />
                       <span className="ml-2">Sometimes</span>
                     </label>
@@ -248,7 +248,7 @@ export default function StudentSurveyPage() {
                         value="never"
                         checked={surveyData.internetAvailability === 'never'}
                         onChange={handleSurveyChange}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                        className="h-4 w-4 text-primary focus:ring-primary border-slate-300"
                       />
                       <span className="ml-2">Never</span>
                     </label>
@@ -260,7 +260,7 @@ export default function StudentSurveyPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
                 >
                   {isLoading ? 'Submitting...' : 'Submit Survey'}
                 </button>

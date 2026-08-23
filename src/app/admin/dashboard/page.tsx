@@ -73,36 +73,36 @@ export default function AdminDashboardPage() {
   if (isLoading || loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-gray-50">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-slate-50">
+      <h1 className="text-3xl font-bold text-ink tracking-tight mb-6">Admin Dashboard</h1>
       {error && (
         <p className="mb-4 p-3 bg-red-50 text-red-600 rounded w-full max-w-xs">
           {error}
         </p>
       )}
       {!user ? (
-        <p className="text-gray-600">You are not logged in.</p>
+        <p className="text-slate-600">You are not logged in.</p>
       ) : (
         <div className="w-full max-w-4xl space-y-6">
-          <div className="border rounded-lg p-6 bg-white shadow-sm">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Manage Users</h2>
+          <div className="border border-slate-200 rounded-[10px] p-6 bg-white shadow-card">
+            <h2 className="text-2xl font-semibold text-ink mb-4">Manage Users</h2>
 
             {users.length === 0 ? (
-              <p className="text-gray-600">No users found.</p>
+              <p className="text-slate-600">No users found.</p>
             ) : (
               <div className="space-y-4">
                 {users.map((profile) => (
-                  <div key={profile.id} className="border p-4 rounded-lg bg-gray-50">
+                  <div key={profile.id} className="border border-slate-200 p-4 rounded-[10px] bg-slate-50">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium text-gray-800">{profile.username || 'Unnamed'}</h3>
-                        <p className="text-sm text-gray-500">{profile.id}</p>
+                        <h3 className="font-medium text-slate-800">{profile.username || 'Unnamed'}</h3>
+                        <p className="text-sm text-slate-500">{profile.id}</p>
                       </div>
                       <div className="space-x-3">
                         <select
                           value={profile.role}
                           onChange={(e) => updateUserRole(profile.id, e.target.value as 'admin' | 'teacher' | 'student')}
-                          className="border rounded px-3 py-1"
+                          className="border border-slate-300 rounded-md px-3 py-1"
                         >
                           <option value="student">Student</option>
                           <option value="teacher">Teacher</option>
@@ -116,10 +116,10 @@ export default function AdminDashboardPage() {
             )}
           </div>
 
-          <p className="mt-4 text-sm text-gray-600">
+          <p className="mt-4 text-sm text-slate-600">
             <button
               onClick={() => router.push('/assessment')}
-              className="text-gray-600 hover:underline font-medium"
+              className="text-slate-600 hover:underline font-medium"
             >
               Back to Assessment
             </button>

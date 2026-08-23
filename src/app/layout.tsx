@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from '@/context/AuthContext';
 import NavAuth from '@/components/auth/NavAuth';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -25,10 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" data-theme="red" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <AuthProvider>
           {/* Navigation */}
@@ -37,7 +29,7 @@ export default function RootLayout({
             <div className="flex justify-between h-16">
               <div className="flex">
                 <div className="flex-shrink-0 flex items-center">
-                  <a href="/" className="text-xl font-bold text-indigo-600">
+                  <a href="/" className="text-xl font-bold text-primary tracking-tight">
                     EduFit Nepal
                   </a>
                 </div>
@@ -45,19 +37,19 @@ export default function RootLayout({
                   <div className="ml-10 flex items-baseline space-x-4">
                     <a
                       href="/assessment"
-                      className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-indigo-700 hover:bg-gray-50"
+                      className="px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-primary-hover hover:bg-slate-50"
                     >
                       School Assessment
                     </a>
                     <a
                       href="/student"
-                      className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-indigo-700 hover:bg-gray-50"
+                      className="px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-primary-hover hover:bg-slate-50"
                     >
                       Student Survey
                     </a>
                     <a
                       href="/recommendations"
-                      className="px-3 py-2 rounded-md text-sm font-medium text-gray-500 hover:text-indigo-700 hover:bg-gray-50"
+                      className="px-3 py-2 rounded-md text-sm font-medium text-slate-500 hover:text-primary-hover hover:bg-slate-50"
                     >
                       Recommendations
                     </a>
