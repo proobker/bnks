@@ -42,6 +42,10 @@ const defaultProfile: StudentEventProfile = {
 
 const NO_SAVES: Set<string> = new Set();
 
+// Personal saves ship behind this flag until the saved_events table is created
+// in Supabase (see TODO-saved-events.md). Flip to true to re-enable everything.
+const SAVES_ENABLED = false;
+
 const verificationStyles: Record<VerificationStatus, string> = {
   VERIFIED: 'bg-green-100 text-green-800 border-green-300',
   CROSS_CHECKED: 'bg-blue-100 text-blue-800 border-blue-300',
@@ -88,7 +92,7 @@ export default function EventFinder() {
   const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !SAVES_ENABLED) return;
     supabase
       .from('saved_events')
       .select('event_id')
@@ -310,17 +314,17 @@ export default function EventFinder() {
       {/* Results */}
       <h3 className="text-lg font-semibold text-gray-800 mb-1">
         Your Event Matches ({visibleMatches.length})
-        {user && visibleSaved.size > 0 && (
+        {SAVES_ENABLED && user && visibleSaved.size > 0 && (
           <span className="ml-2 text-sm font-normal text-rose-500">♥ {visibleSaved.size} saved</span>
         )}
       </h3>
-      {!user && (
+      {SAVES_ENABLED && !user && (
         <p className="text-xs text-gray-500 mb-4">
           Browsing is free — log in to save events to your personal list.
         </p>
       )}
 
-      {saveError && (
+      {SAVES_ENABLED && saveError && (
         <p className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">{saveError}</p>
       )}
 
@@ -449,17 +453,19 @@ export default function EventFinder() {
                   </div>
                 )}
 
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <button
-                    onClick={() => toggleSave(ev.id)}
-                    className={`text-sm font-medium px-3 py-1.5 rounded-md border transition-colors ${
-                      visibleSaved.has(ev.id)
-                        ? 'border-rose-200 bg-rose-50 text-rose-600'
-                        : 'border-gray-300 text-gray-600 hover:border-indigo-400 hover:text-indigo-600'
-                    }`}
-                  >
-                    {visibleSaved.has(ev.id) ? '♥ Saved' : '♡ Save'}
-                  </button>
+                <div className={`mt-3 flex items-center gap-3 ${SAVES_ENABLED ? 'justify-between' : 'justify-end'}`}>
+                  {SAVES_ENABLED && (
+                    <button
+                      onClick={() => toggleSave(ev.id)}
+                      className={`text-sm font-medium px-3 py-1.5 rounded-md border transition-colors ${
+                        visibleSaved.has(ev.id)
+                          ? 'border-rose-200 bg-rose-50 text-rose-600'
+                          : 'border-gray-300 text-gray-600 hover:border-indigo-400 hover:text-indigo-600'
+                      }`}
+                    >
+                      {visibleSaved.has(ev.id) ? '♥ Saved' : '♡ Save'}
+                    </button>
+                  )}
                   <button
                     onClick={() => setExpandedId(isExpanded ? null : ev.id)}
                     className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
@@ -468,7 +474,7 @@ export default function EventFinder() {
                   </button>
                 </div>
 
-                {loginPromptId === ev.id && !user && (
+                {SAVES_ENABLED && loginPromptId === ev.id && !user && (
                   <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-800">
                     Log in to save events to your personal list.{' '}
                     <a href="/student-login" className="font-medium underline text-indigo-600 hover:text-indigo-800">
