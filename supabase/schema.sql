@@ -189,3 +189,30 @@ BEGIN
     RETURN NEW;
 END;
 $$ language 'plpgsql';
+-- ============================================
+-- Saved Events Table (Student Hub MVP)
+-- Personal event bookmarks per student account
+-- ============================================
+CREATE TABLE saved_events (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    event_id TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE (user_id, event_id)
+);
+
+CREATE INDEX idx_saved_events_user_id ON saved_events(user_id);
+
+ALTER TABLE saved_events ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own saved events"
+    ON saved_events FOR SELECT
+    USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can save events"
+    ON saved_events FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can remove own saved events"
+    ON saved_events FOR DELETE
+    USING (auth.uid() = user_id);

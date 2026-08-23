@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createBrowserSupabaseClient } from '@/lib/supabase';
 import { getAllToolCompatibility, edTechTools } from '@/lib/scoring';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { useAuth } from '@/context/AuthContext';
 import EventFinder from '@/components/events/EventFinder';
 import type {
   SchoolProfile,
@@ -34,20 +34,22 @@ export default function RecommendationsPage() {
   const [compatibilityResults, setCompatibilityResults] = useState<CompatibilityResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [schoolId, setSchoolId] = useState<string | null>(null);
 
   const supabase = createBrowserSupabaseClient();
+  const { user, isLoading: authLoading } = useAuth();
 
   const demoSchoolId = 'demo-school-12345';
 
   useEffect(() => {
-    setSchoolId(demoSchoolId);
-    fetchSchoolData();
-  }, []);
+    if (authLoading) return;
+    if (!user) {
+      setIsLoading(false);
+      return;
+    }
+    fetchSchoolData(demoSchoolId);
+  }, [authLoading, user]);
 
-  const fetchSchoolData = async () => {
-    if (!schoolId) return;
-
+  const fetchSchoolData = async (schoolId: string) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -135,16 +137,28 @@ export default function RecommendationsPage() {
   const { profile } = schoolData;
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {isLoading && !profile ? (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {authLoading || (isLoading && !profile) ? (
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="flex items-center justify-center min-h-[calc(100vh-160px)] py-20">
               <div className="text-center">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
                 <p className="mt-4 text-gray-600">Loading your school assessment data...</p>
               </div>
+            </div>
+          </div>
+        ) : !user ? (
+          <div className="py-12">
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6 text-center">
+              <h2 className="text-xl font-semibold text-indigo-900 mb-2">School results need an account</h2>
+              <p className="text-indigo-700 mb-4 text-sm">
+                Browse and view all student events below for free. Log in only to save events
+                or see EdTech compatibility results for your school.
+              </p>
+              <a href="/student-login" className="inline-block px-5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm font-medium">
+                Log in / Sign up
+              </a>
             </div>
           </div>
         ) : error ? (
@@ -265,6 +279,5 @@ export default function RecommendationsPage() {
           <EventFinder />
         </div>
       </div>
-    </ProtectedRoute>
   );
 }
