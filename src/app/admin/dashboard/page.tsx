@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
-import { getSupabaseClient } from '../lib/supabase'
-import { useAuth } from '../contexts/AuthContext'
-import { useRouter } from 'next/navigation'
+'use client';
 
-// Define the user profile type
+import { useState, useEffect } from 'react';
+import { getSupabaseClient } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+
 type Profile = {
   id: string
   username: string | null
@@ -13,20 +14,28 @@ type Profile = {
   updated_at: string
 }
 
-export default function AdminDashboard() {
-  const { user } = useAuth()
+export default function AdminDashboardPage() {
+  const { user, isLoading } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [users, setUsers] = useState<Profile[]>([])
 
   useEffect(() => {
-    if (user && user.role === 'admin') {
-      fetchUsers()
-    } else {
-      router.push('/dashboard')
+    if (isLoading) return
+
+    if (!user) {
+      router.replace('/teacher-login')
+      return
     }
-  }, [user])
+
+    if (user.role !== 'admin') {
+      router.replace('/access-denied')
+      return
+    }
+
+    fetchUsers()
+  }, [user, isLoading, router])
 
   const fetchUsers = async () => {
     setLoading(true)
@@ -55,13 +64,13 @@ export default function AdminDashboard() {
         .eq('id', userId)
 
       if (error) throw error
-      await fetchUsers() // Refresh list
+      await fetchUsers()
     } catch (err: any) {
       setError(err.message || 'Failed to update user role')
     }
   }
 
-  if (loading) return <div>Loading...</div>
+  if (isLoading || loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-gray-50">
@@ -108,10 +117,10 @@ export default function AdminDashboard() {
 
           <p className="mt-4 text-sm text-gray-600">
             <button
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push('/assessment')}
               className="text-gray-600 hover:underline font-medium"
             >
-              Back to User Dashboard
+              Back to Assessment
             </button>
           </p>
         </div>

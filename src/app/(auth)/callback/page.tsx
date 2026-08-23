@@ -7,24 +7,26 @@ import { useAuth } from '@/context/AuthContext';
 
 export default function AuthCallback() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      // Determine redirect based on user metadata or other flags
-      // For now, we'll check if they have teacher-like email or use a heuristic
-      const isTeacher = user.email?.includes('@teacher') ||
-                       // Or check if they have a teacher profile in DB
-                       false; // Placeholder - would check actual user role/profile
+    if (isLoading) return;
 
-      // Redirect to appropriate dashboard
-      if (isTeacher) {
-        router.replace('/assessment');
-      } else {
-        router.replace('/student');
-      }
+    if (!user) {
+      router.replace('/student-login');
+      return;
     }
-  }, [router, user]);
 
-  return null; // Redirect happens in useEffect
+    if (user.role === 'admin') {
+      router.replace('/admin/dashboard');
+    } else {
+      router.replace('/student');
+    }
+  }, [router, user, isLoading]);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p className="text-gray-600">Signing you in...</p>
+    </div>
+  );
 }

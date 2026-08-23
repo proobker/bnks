@@ -2,7 +2,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { getCurrentUserRole } from '@/lib/supabase';
 
 export default function TeacherLoginForm() {
   const [email, setEmail] = useState('');
@@ -10,6 +12,7 @@ export default function TeacherLoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { signIn } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,10 +21,10 @@ export default function TeacherLoginForm() {
 
     try {
       await signIn.withEmailPassword(email, password);
-      // Redirect will be handled by AuthContext or callback
+      const role = await getCurrentUserRole();
+      router.replace(role === 'admin' ? '/admin/dashboard' : '/assessment');
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.');
-    } finally {
       setIsLoading(false);
     }
   };

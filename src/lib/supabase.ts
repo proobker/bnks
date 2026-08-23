@@ -33,7 +33,7 @@ export const signInWithGoogle = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`
+      redirectTo: `${window.location.origin}/callback`
     }
   });
   if (error) throw error;
@@ -52,6 +52,20 @@ export const getCurrentUser = async () => {
     data: { user },
   } = await supabase.auth.getUser();
   return user;
+};
+
+export const getCurrentUserRole = async (): Promise<string | null> => {
+  const supabase = createBrowserSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+  return profile?.role ?? null;
 };
 
 export const onAuthStateChange = (callback: (user: User | null) => void) => {
@@ -78,5 +92,6 @@ export default {
   signInWithGoogle,
   signOut,
   getCurrentUser,
+  getCurrentUserRole,
   onAuthStateChange
 };

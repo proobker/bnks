@@ -8,11 +8,33 @@ import {
   signInWithGoogle,
   signOut,
   getCurrentUser,
-  onAuthStateChange
+  onAuthStateChange,
+  getSupabaseClient
 } from '@/lib/supabase';
 
+export type AuthUser = User & {
+  role?: string | null;
+};
+
+const fetchProfile = async (userId: string) => {
+  const supabase = getSupabaseClient();
+  if (!supabase) return null;
+  const { data } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  return data;
+};
+
+const mergeProfile = async (user: User | null): Promise<AuthUser | null> => {
+  if (!user) return null;
+  const profile = await fetchProfile(user.id);
+  return profile ? { ...user, ...profile } : user;
+};
+
 interface AuthContextProps {
-  user: User | null;
+  user: AuthUser | null;
   isLoading: boolean;
   signIn: {
     withEmailPassword: (email: string, password: string) => Promise<void>;
@@ -24,14 +46,14 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const currentUser = await getCurrentUser();
-        setUser(currentUser);
+        setUser(await mergeProfile(currentUser));
       } catch (error) {
         console.error('Failed to get current user:', error);
         setUser(null);
@@ -43,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     getUser();
 
     const { data: { subscription } } = onAuthStateChange((user) => {
-      setUser(user);
+      mergeProfile(user).then(setUser);
       setIsLoading(false);
     });
 

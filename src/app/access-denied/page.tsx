@@ -1,7 +1,9 @@
-import { useAuth } from '../contexts/AuthContext'
+'use client';
+
+import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 
-export default function AccessDenied() {
+export default function AccessDeniedPage() {
   const { user } = useAuth()
   const router = useRouter()
 
@@ -9,7 +11,7 @@ export default function AccessDenied() {
     if (user?.role === 'admin') {
       router.push('/admin/dashboard')
     } else {
-      router.push('/dashboard')
+      router.push('/assessment')
     }
   }
 
