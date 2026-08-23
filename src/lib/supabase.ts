@@ -28,16 +28,24 @@ export const signInWithEmailPassword = async (email: string, password: string) =
   return data;
 };
 
-export const signInWithGoogle = async () => {
+export const signUpWithEmailPassword = async (
+  email: string,
+  password: string,
+  role: string
+) => {
   const supabase = createBrowserSupabaseClient();
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
     options: {
-      redirectTo: `${window.location.origin}/callback`
-    }
+      data: { role },
+    },
   });
   if (error) throw error;
-  return data;
+  if (data.session && data.user) {
+    await supabase.from('profiles').upsert({ id: data.user.id, role });
+  }
+  return { needsEmailConfirmation: !data.session };
 };
 
 export const signOut = async () => {
@@ -89,7 +97,7 @@ export default {
   createServerSupabaseClient,
   getSupabaseClient,
   signInWithEmailPassword,
-  signInWithGoogle,
+  signUpWithEmailPassword,
   signOut,
   getCurrentUser,
   getCurrentUserRole,

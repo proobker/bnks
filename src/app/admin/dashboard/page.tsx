@@ -55,7 +55,7 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const updateUserRole = async (userId: string, newRole: 'admin' | 'user') => {
+  const updateUserRole = async (userId: string, newRole: 'admin' | 'teacher' | 'student') => {
     try {
       const supabase = getSupabaseClient()!
       const { error } = await supabase
@@ -101,10 +101,11 @@ export default function AdminDashboardPage() {
                       <div className="space-x-3">
                         <select
                           value={profile.role}
-                          onChange={(e) => updateUserRole(profile.id, e.target.value as 'admin' | 'user')}
+                          onChange={(e) => updateUserRole(profile.id, e.target.value as 'admin' | 'teacher' | 'student')}
                           className="border rounded px-3 py-1"
                         >
-                          <option value="user">User</option>
+                          <option value="student">Student</option>
+                          <option value="teacher">Teacher</option>
                           <option value="admin">Admin</option>
                         </select>
                       </div>

@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { redirectPathForRole } from '@/lib/auth';
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -17,11 +18,7 @@ export default function AuthCallback() {
       return;
     }
 
-    if (user.role === 'admin') {
-      router.replace('/admin/dashboard');
-    } else {
-      router.replace('/student');
-    }
+    router.replace(redirectPathForRole(user.role));
   }, [router, user, isLoading]);
 
   return (

@@ -1,5 +1,5 @@
 // src/app/(auth)/teacher-login/page.tsx
-import TeacherLoginForm from '@/components/auth/TeacherLoginForm';
+import EmailAuthForm from '@/components/auth/EmailAuthForm';
 import { authMetadata } from '@/layouts/auth-layout';
 import type { Metadata } from "next";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function TeacherLoginPage() {
   return (
     <>
-      <TeacherLoginForm />
+      <EmailAuthForm role="teacher" mode="login" />
     </>
   );
 }

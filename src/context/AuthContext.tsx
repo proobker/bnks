@@ -5,7 +5,6 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User } from '@supabase/supabase-js';
 import {
   signInWithEmailPassword,
-  signInWithGoogle,
   signOut,
   getCurrentUser,
   onAuthStateChange,
@@ -38,7 +37,6 @@ interface AuthContextProps {
   isLoading: boolean;
   signIn: {
     withEmailPassword: (email: string, password: string) => Promise<void>;
-    withGoogle: () => Promise<void>;
   };
   signOut: () => Promise<void>;
 }
@@ -85,17 +83,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signInWithGoogleHandler = async () => {
-    setIsLoading(true);
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const signOutHandler = async () => {
     setIsLoading(true);
     try {
@@ -112,7 +99,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoading,
     signIn: {
       withEmailPassword: signInWithEmailPasswordHandler,
-      withGoogle: signInWithGoogleHandler,
     },
     signOut: signOutHandler,
   };
